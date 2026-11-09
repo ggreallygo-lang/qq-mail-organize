@@ -1,0 +1,20 @@
+# 凭据与个人配置 —— 绝不提交
+imap_auth.txt
+config.json
+
+# 运行日志与邮件数据 —— 绝不提交
+*.log
+*.jsonl
+last_plan.json
+*_plan.json
+failed_uids.txt
+unread_raw.json
+inbox_emails.json
+imap_*.json
+batch_results*.json
+batch_run_log*.txt
+finalize_log*.txt
+
+# Python 运行时产物
+__pycache__/
+*.pyc

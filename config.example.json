@@ -1,0 +1,86 @@
+{
+  "_readme": "QQ 邮箱整理工具的唯一配置源。复制本文件为 config.json 后填写你的账号；改配置，不要改脚本里的常量。修改后先用 qqmail.py state 自检。config.json 与 imap_auth.txt 均已被 .gitignore 排除，切勿提交。",
+  "version": 3,
+
+  "account": {
+    "user": "your-qq-email@qq.com",
+    "host": "imap.qq.com",
+    "port": 993,
+    "auth_file": "imap_auth.txt"
+  },
+
+  "safety": {
+    "_comment": "以下任何一项都不得为了速度而放宽；一次真实误删事故就是因为放宽了 1/2/3",
+    "batch_size": 20,
+    "staging_folder": "待删除",
+    "forbid_qq_trash": true,
+    "verify_with_uid_search": true,
+    "select_once_per_run": true,
+    "dry_run_dump_uids": true,
+    "abort_on_partial_batch": true,
+    "max_moves_per_run": 1000
+  },
+
+  "folders": {
+    "_comment": "示例文件夹结构，按自己的邮箱改写；键名自定，值为邮箱里的真实文件夹名",
+    "inbox": "INBOX",
+    "human": "真人邮件",
+    "salary": "工资单",
+    "billing": "账单财务",
+    "bank_daily": "银行日报",
+    "recruit": "招聘求职",
+    "subscription": "订阅资讯",
+    "notice": "通知与安全"
+  },
+
+  "protected": {
+    "_comment": "命中即永不删除，优先级高于一切可删规则",
+    "regex": "密码|password|重置|reset|恢复|recover|帐户|账户|account|收据|receipt|登录|login|signin|安全提醒|security alert|通行证|令牌|激活|activate|绑定|验证您的|verification|订阅确认|续期"
+  },
+
+  "ad_marker": {
+    "_comment": "带广告标记的邮件即使命中 protected 也判为营销",
+    "regex": "<广告>|\\(ad\\)|（ad）|限时|促销|折扣|特卖"
+  },
+
+  "rules": {
+    "_comment": "可删规则示例（qqmail.py move 用），按自己的邮件构成增删",
+    "daily": {
+      "desc": "银行每日额度播报（示例关键词）",
+      "field": "subject",
+      "contains": ["信用管家"]
+    },
+    "promo": {
+      "desc": "营销促销",
+      "field": "subject",
+      "regex": "<广告>|特卖|sale|savings|促销|折扣|优惠|限时|out now|trailer|reveal|early access|回顾|recap"
+    },
+    "verify_code": {
+      "desc": "过期验证码",
+      "field": "subject",
+      "regex": "验证码|确认码|verification code"
+    },
+    "recruit_ad": {
+      "desc": "招聘平台 EDM 广告（示例发件人特征）",
+      "field": "from",
+      "regex": "lietou-edm|51job|zhaopin|liepin|lagou|maimai|jobvipmail|quickmail|recruitment\\.|newsletter\\.|trigger\\.|mx01\\.|ibeisen|ajinga|xiangcaozhaopin|renruihr|myworkday|shixiseng"
+    },
+    "nag": {
+      "desc": "重复催办类无效通知（空间已满/附件到期/生日祝福/撤回成功）",
+      "field": "subject",
+      "regex": "储存空间已满|存储空间已满|超大附件到期|祝你生日快乐|邮件已成功撤回"
+    }
+  },
+
+  "relocate_rules": {
+    "_comment": "只搬家不删除的规则示例，配合 qqmail.py relocate 使用",
+    "apple_receipt": {
+      "desc": "Apple 收据/订单/物流 → 账单财务",
+      "field": "subject",
+      "regex": "收据|订单|运送|正在处理"
+    }
+  },
+
+  "run_log": "run_log.jsonl",
+  "plan_file": "last_plan.json"
+}
